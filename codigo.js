@@ -1,3 +1,17 @@
+async function cargarPagina(pagina) {
+    fetch(pagina)
+        .then( response => {
+            if (!response.ok) throw new Error("Error en la pagina");
+            return response.text();
+        }).then(html => {
+            console.log("error la pagiana");
+            console.log( html );
+            document.getElementById("pagina").innerHTML = html;
+        }).catch(error =>{
+            document.getElementById("pagina").innerHTML = "<p>error la pagina no existe</p>";
+            console.log(error);
+        })
+}
 async function cargarMenu() {
     try {
         const response = await fetch("http://localhost:9090/api/menu", {
@@ -14,6 +28,8 @@ async function cargarMenu() {
             const li=document.createElement("li")
             const a=document.createElement("a")
             a.textContent = element.nombre
+            a.href="#"
+            a.onclick=()=>cargarPagina(element.url)
             li.appendChild(a)
             menuList.appendChild(li)
         });
@@ -22,4 +38,8 @@ async function cargarMenu() {
     }
     
 }
-cargarMenu();
+
+document.addEventListener("DOMContentLoaded", () => {
+    cargarPagina("inicio.html");
+    cargarMenu();
+});

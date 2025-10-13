@@ -1,3 +1,24 @@
+
+async function cargarPagina(pagina) {
+    try {
+       const response = await fetch(pagina);
+       if (!response.ok) throw new Error("Error en la página");
+       const html = await response.text();
+       document.getElementById("pagina").innerHTML = html;
+       if (pagina === "noticias.html") {
+            if (window.initNoticias) {
+                window.initNoticias();
+            } else {
+                console.error("initNoticias no está definido todavía");
+            }
+        }
+    } catch (error) {
+        document.getElementById("pagina").innerHTML = "<p>Error: la página no existe</p>";
+        console.log(error);
+    }
+}
+
+
 async function cargarMenu() {
     try {
         const response = await fetch("http://localhost:9090/api/menu", {
@@ -14,6 +35,8 @@ async function cargarMenu() {
             const li=document.createElement("li")
             const a=document.createElement("a")
             a.textContent = element.nombre
+            a.href="#"
+            a.onclick=()=>cargarPagina(element.url)
             li.appendChild(a)
             menuList.appendChild(li)
         });
@@ -22,4 +45,16 @@ async function cargarMenu() {
     }
     
 }
-cargarMenu();
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    
+    const anterior=document.getElementById("anterior");
+    const paginaActual=document.getElementById("paginaActual");
+    const siguiente=document.getElementById("siguiente");
+    
+    
+    cargarPagina("inicio.html");
+    cargarMenu();
+    
+});

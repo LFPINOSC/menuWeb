@@ -1,4 +1,5 @@
 window.initNoticias = function() {
+    console.log("noticias si llega")
     const noticia = document.getElementById('noticia');
     const anterior = document.getElementById("anterior");
     const paginaActual = document.getElementById("paginaActual");
